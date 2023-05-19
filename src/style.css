@@ -1,0 +1,32 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+    color: #c7c7c7;
+    font-family: Lato, sans-serif;
+    background-color: #000000;
+    min-height: 100%;
+    user-select: none;
+}
+
+.arco-input-wrapper.large-input .arco-input.arco-input-size-large {
+    font-size: 18px !important;
+}
+
+.arco-radio-button.arco-radio-checked {
+    font-weight: bold;
+    color: rgb(var(--primary-7));
+}
+
+.arco-menu-dark {
+    background-color: rgb(var(--color-black));
+}
+
+.arco-menu-dark .arco-menu-item, .arco-menu-dark .arco-menu-group-title, .arco-menu-dark .arco-menu-pop-header, .arco-menu-dark .arco-menu-inline-header {
+    background-color: rgb(var(--color-black));
+}
+
+img {
+    max-width: 100%;
+}

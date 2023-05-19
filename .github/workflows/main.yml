@@ -1,0 +1,51 @@
+name: deploy to aliyun
+on:
+    push:
+        branches:
+            - master
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        steps:
+            # 切换分支
+            - name: Checkout
+              uses: actions/checkout@master
+
+            # 使用缓存
+            - name: Cache Primes
+              uses: actions/cache@v3
+              env:
+                  cache-name: cache-node-modules
+              with:
+                  path: ~/.npm
+                  key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+                  restore-keys: |
+                      ${{ runner.os }}-build-${{ env.cache-name }}-
+                      ${{ runner.os }}-build-
+                      ${{ runner.os }}-
+
+            # 使用 根据自己的情况选择node版本，这里用node:19
+            - name: use Node.js 19
+              uses: actions/setup-node@v3
+              with:
+                  node-version: "19"
+                  check-latest: true
+
+            # npm install and build
+            - name: npm install and build
+              run: |
+                  npm install
+                  npm run build
+              env:
+                  CI: true
+
+            # Deploy to aliyun
+            - name: Deploy to aliyun server
+              uses: easingthemes/ssh-deploy@main
+              env:
+                  SSH_PRIVATE_KEY: ${{ secrets.SSH_KEY }}
+                  ARGS: "-avzr --delete"
+                  SOURCE: "dist/"
+                  REMOTE_HOST: "8.218.35.151"
+                  REMOTE_USER: "root"
+                  TARGET: "/wwwroot/yumiwudesign/material_edit_vue/dist/"
